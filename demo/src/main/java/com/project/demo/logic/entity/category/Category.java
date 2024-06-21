@@ -14,7 +14,7 @@ public class Category {
     private Long id;
     private String name;
     private String description;
-    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Product> product;
 
@@ -44,11 +44,4 @@ public class Category {
         this.description = description;
     }
 
-    public List<Product> getProduct() {
-        return product;
-    }
-
-    public void setProduct(List<Product> product) {
-        this.product = product;
-    }
 }
