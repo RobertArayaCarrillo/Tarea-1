@@ -1,5 +1,7 @@
 package com.project.demo.rest.product;
 
+import com.project.demo.logic.entity.category.Category;
+import com.project.demo.logic.entity.category.CategoryRepository;
 import com.project.demo.logic.entity.product.Product;
 import com.project.demo.logic.entity.product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +12,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
 public class ProductRestController {
     @Autowired
     private ProductRepository ProductRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -28,6 +33,8 @@ public class ProductRestController {
 
     @PostMapping
     public Product addProduct(@RequestBody Product product) {
+        Optional<Category> selectedCategory = categoryRepository.findById(product.getCategory().getId());
+        selectedCategory.ifPresent(product::setCategory);
         return ProductRepository.save(product);
     }
 
