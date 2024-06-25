@@ -26,12 +26,13 @@ public class ProductRestController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
+    @PreAuthorize("hasAnyRole('USER, SUPER_ADMIN_ROLE')")
     public List<Product> getAllPoducts() {
         return ProductRepository.findAll();
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
     public Product addProduct(@RequestBody Product product) {
         Optional<Category> selectedCategory = categoryRepository.findById(product.getCategory().getId());
         selectedCategory.ifPresent(product::setCategory);
@@ -49,6 +50,7 @@ public class ProductRestController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
     public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
         return ProductRepository.findById(id)
                 .map(existingProduct -> {
@@ -65,7 +67,8 @@ public class ProductRestController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
+    public void deleteProduct(@PathVariable Long id) {
         ProductRepository.deleteById(id);
     }
 

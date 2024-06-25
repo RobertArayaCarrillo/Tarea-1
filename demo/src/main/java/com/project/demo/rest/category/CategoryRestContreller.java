@@ -20,12 +20,13 @@ public class CategoryRestContreller {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
+    @PreAuthorize("hasAnyRole('USER, SUPER_ADMIN_ROLE')")
     public List<Category> getAllCategory() {
         return CategoryRepository.findAll();
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
     public Category addCategory(@RequestBody Category category) {
         return CategoryRepository.save(category);
     }
@@ -41,6 +42,7 @@ public class CategoryRestContreller {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
     public Category updateCategory(@PathVariable Long id, @RequestBody Category category) {
         return CategoryRepository.findById(id)
                 .map(existingCategory -> {
@@ -55,6 +57,7 @@ public class CategoryRestContreller {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
     public void deleteCategory(@PathVariable Long id) {
         CategoryRepository.deleteById(id);
     }
